@@ -1,0 +1,14 @@
+# Carpetas que genera Projucer / Visual Studio al compilar (se regeneran solas)
+Builds/
+JuceLibraryCode/
+
+# Copias de seguridad manuales (el historial de Git ya las sustituye)
+Backup_Fase*/
+
+# Archivos de Visual Studio y del sistema
+.vs/
+*.user
+*.suo
+*.vst3
+Thumbs.db
+Desktop.ini
