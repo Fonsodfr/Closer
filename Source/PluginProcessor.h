@@ -73,6 +73,13 @@ public:
     juce::AudioProcessorValueTreeState& getAPVTS() { return apvts; }
     AnalyserFifo& getAnalyser() { return analyser; }
 
+    // F4: el botón de bypass del DAW controla nuestro propio bypass (con fundido sin clics)
+    juce::AudioProcessorParameter* getBypassParameter() const override { return apvts.getParameter ("bypass"); }
+
+    // F4: correlación de fase de la salida, de -1 (fuera de fase) a +1 (mono).
+    // La lee el medidor de la interfaz; atómica para no bloquear el audio.
+    float getCorrelation() const { return correlation.load(); }
+
 private:
     //==============================================================================
     juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
@@ -89,6 +96,12 @@ private:
     float readParam (const char* id, float fallback) const;
 
     AnalyserFifo analyser;   // F3: muestras para el visualizador de espectro
+
+    // F4: bypass con fundido de 20 ms (0 = procesado, 1 = señal original)
+    juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> bypassMix;
+
+    // F4: correlación de fase suavizada
+    std::atomic<float> correlation { 1.0f };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ImagerAudioProcessor)
 };

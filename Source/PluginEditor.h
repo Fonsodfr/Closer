@@ -58,10 +58,57 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SpectrumDisplay)
 };
 
+
 //==============================================================================
 /**
-    Editor provisional: espectro + 5 mandos.
-    La interfaz definitiva (diseño Rave Factory) llegará en otra fase.
+    F4: el "estilo" Rave Factory. En JUCE, un LookAndFeel decide cómo se dibujan
+    los controles estándar (mandos, botones, cajas de texto). Cambiándolo, todos
+    los mandos del plugin pasan a tener el aspecto del diseño sin tocar su lógica.
+*/
+class RaveFactoryLookAndFeel  : public juce::LookAndFeel_V4
+{
+public:
+    RaveFactoryLookAndFeel();
+
+    void drawRotarySlider (juce::Graphics&, int x, int y, int width, int height,
+                           float sliderPos, float startAngle, float endAngle, juce::Slider&) override;
+
+    juce::Label* createSliderTextBox (juce::Slider&) override;
+
+    void drawButtonBackground (juce::Graphics&, juce::Button&, const juce::Colour& backgroundColour,
+                               bool isMouseOver, bool isButtonDown) override;
+
+    juce::Font getTextButtonFont (juce::TextButton&, int buttonHeight) override;
+};
+
+//==============================================================================
+/**
+    F4: medidor de correlación de fase.
+    +1 = L y R iguales (mono) · 0 = sin relación · -1 = opuestos (se anulan en mono).
+    En verde la zona segura, en naranja la que da problemas en mono y en vinilo.
+*/
+class CorrelationMeter  : public juce::Component,
+                          private juce::Timer
+{
+public:
+    explicit CorrelationMeter (ImagerAudioProcessor&);
+    ~CorrelationMeter() override;
+
+    void paint (juce::Graphics&) override;
+
+private:
+    void timerCallback() override;
+
+    ImagerAudioProcessor& audioProcessor;
+    float value = 1.0f;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CorrelationMeter)
+};
+
+//==============================================================================
+/**
+    F4: interfaz Rave Factory: chasis cepillado, cabecera con el logo RF,
+    pantalla de espectro, mandos por banda, cortes, medidor de fase y bypass.
 */
 class ImagerAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
@@ -76,7 +123,12 @@ public:
 private:
     ImagerAudioProcessor& audioProcessor;
 
-    SpectrumDisplay spectrum;
+    // El LookAndFeel va PRIMERO: así se destruye el último, cuando ya no hay
+    // ningún mando que lo esté usando.
+    RaveFactoryLookAndFeel lookAndFeel;
+
+    SpectrumDisplay  spectrum;
+    CorrelationMeter phaseMeter;
 
     // Un "mando" = rueda + etiqueta + enlace con su parámetro
     struct Knob
@@ -86,10 +138,14 @@ private:
         std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attachment;
     };
 
-    // Orden: Bass, Mid, High (fila de arriba) y los dos cortes (fila de abajo)
+    // Orden: LOW, MIDS, HIGH (anchura) y los dos cortes de frecuencia
     std::array<Knob, 5> knobs;
 
-    int separatorY = 0;   // línea entre las dos filas de mandos
+    juce::TextButton bypassButton { "BYPASS" };
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassAttachment;
+
+    // Dibuja todo lo que no se mueve: chasis, cabecera, paneles y textos fijos
+    void drawBackground (juce::Graphics&);
 
     void setupKnob (Knob& knob, const juce::String& paramID, const juce::String& title, juce::Colour colour);
 

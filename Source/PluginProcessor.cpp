@@ -47,6 +47,10 @@ juce::AudioProcessorValueTreeState::ParameterLayout ImagerAudioProcessor::create
         juce::ParameterID { "highXover", 1 }, "High Crossover",
         juce::NormalisableRange<float> (1000.0f, 12000.0f, 10.0f, 0.5f), 4000.0f, hzText));
 
+    // F4: bypass (también lo usa el botón de bypass del propio DAW)
+    params.push_back (std::make_unique<juce::AudioParameterBool> (
+        juce::ParameterID { "bypass", 1 }, "Bypass", false));
+
     return { params.begin(), params.end() };
 }
 
@@ -150,6 +154,10 @@ void ImagerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     smoothedMid .setCurrentAndTargetValue (readParam ("midWidth",  100.0f) / 100.0f);
     smoothedHigh.setCurrentAndTargetValue (readParam ("highWidth", 100.0f) / 100.0f);
 
+    bypassMix.reset (sampleRate, 0.02);
+    bypassMix.setCurrentAndTargetValue (readParam ("bypass", 0.0f) > 0.5f ? 1.0f : 0.0f);
+    correlation.store (1.0f);
+
     // Los filtros necesitan saber la frecuencia de muestreo. Solo filtran la señal Side,
     // que es un único canal, por eso numChannels = 1.
     juce::dsp::ProcessSpec spec { sampleRate, (juce::uint32) samplesPerBlock, 1 };
@@ -215,6 +223,8 @@ void ImagerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
     highSplit .setCutoffFrequency (highHz);
     lowAllpass.setCutoffFrequency (highHz);   // siempre en la misma frecuencia que el segundo corte
 
+    bypassMix.setTargetValue (readParam ("bypass", 0.0f) > 0.5f ? 1.0f : 0.0f);
+
     // El procesamiento Mid/Side requiere canales estéreo
     if (totalNumInputChannels >= 2 && totalNumOutputChannels >= 2)
     {
@@ -226,6 +236,9 @@ void ImagerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
         // así que el hueco puede venir en dos trozos (final y principio del buffer).
         int start1, size1, start2, size2;
         analyser.fifo.prepareToWrite (numSamples, start1, size1, start2, size2);
+
+        // F4: sumas para la correlación de fase de este bloque
+        double sumLR = 0.0, sumLL = 0.0, sumRR = 0.0;
 
         for (int i = 0; i < numSamples; ++i)
         {
@@ -251,9 +264,16 @@ void ImagerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
                                 + sideMid  * smoothedMid .getNextValue()
                                 + sideHigh * smoothedHigh.getNextValue();
 
-            // 5. Reconstrucción a Left y Right
-            left[i]  = mid + sideOut;
-            right[i] = mid - sideOut;
+            // 5. Reconstrucción a Left y Right, con fundido hacia la señal original si hay bypass
+            const float dry = bypassMix.getNextValue();
+            const float outL = (mid + sideOut) * (1.0f - dry) + l * dry;
+            const float outR = (mid - sideOut) * (1.0f - dry) + r * dry;
+            left[i]  = outL;
+            right[i] = outR;
+
+            sumLR += (double) outL * outR;
+            sumLL += (double) outL * outL;
+            sumRR += (double) outR * outR;
 
             // 6. F3: copiar Mid y Side (ya procesado) al buzón del visualizador
             int slot = -1;
@@ -263,11 +283,20 @@ void ImagerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
             if (slot >= 0)
             {
                 analyser.mid [(size_t) slot] = mid;
-                analyser.side[(size_t) slot] = sideOut;
+                analyser.side[(size_t) slot] = 0.5f * (outL - outR);   // el Side que sale de verdad (respeta el bypass)
             }
         }
 
         analyser.fifo.finishedWrite (size1 + size2);
+
+        // F4: correlación = parecido entre L y R. +1 = iguales (mono), 0 = sin relación,
+        // -1 = opuestos (se anulan en mono). Si hay silencio no se actualiza.
+        const double energy = std::sqrt (sumLL * sumRR);
+        if (energy > 1.0e-9)
+        {
+            const float blockCorr = (float) (sumLR / energy);
+            correlation.store (0.85f * correlation.load() + 0.15f * blockCorr);   // suavizado
+        }
     }
 }
 
