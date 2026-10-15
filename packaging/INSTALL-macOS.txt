@@ -1,0 +1,38 @@
+CLOSER for macOS - test version (Rave Factory)
+=============================================
+
+1. Copy the plugins:
+   - Closer.vst3       ->  ~/Library/Audio/Plug-Ins/VST3/
+   - Closer.component  ->  ~/Library/Audio/Plug-Ins/Components/
+   (In Finder: Go > Go to Folder... and paste the path.)
+
+2. This test version is not signed by Apple yet, so macOS blocks it.
+   Open Terminal and paste this line, then press Enter:
+
+   xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Closer.vst3 ~/Library/Audio/Plug-Ins/Components/Closer.component
+
+3. Restart your DAW and rescan plugins.
+   It appears as "Closer" by "Rave Factory".
+
+Feedback is very welcome: which DAW you use, whether it loads,
+anything that sounds wrong, and what you would add.
+
+
+CLOSER para macOS - versión de prueba (Rave Factory)
+=====================================================
+
+1. Copia los plugins:
+   - Closer.vst3       ->  ~/Library/Audio/Plug-Ins/VST3/
+   - Closer.component  ->  ~/Library/Audio/Plug-Ins/Components/
+   (En el Finder: Ir > Ir a la carpeta... y pega la ruta.)
+
+2. Esta versión de prueba aún no está firmada por Apple y macOS la bloquea.
+   Abre el Terminal, pega esta línea y pulsa Intro:
+
+   xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Closer.vst3 ~/Library/Audio/Plug-Ins/Components/Closer.component
+
+3. Reinicia tu DAW y vuelve a escanear los plugins.
+   Aparece como "Closer" de "Rave Factory".
+
+Cuéntame qué tal: qué DAW usas, si carga bien, si algo suena raro
+y qué le añadirías.

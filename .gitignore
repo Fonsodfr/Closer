@@ -12,3 +12,7 @@ Backup_Fase*/
 *.vst3
 Thumbs.db
 Desktop.ini
+
+# Carpetas de la compilación con CMake (Mac)
+build/
+JUCE/
