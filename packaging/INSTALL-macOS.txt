@@ -1,38 +1,84 @@
-CLOSER for macOS - test version (Rave Factory)
-=============================================
-
-1. Copy the plugins:
-   - Closer.vst3       ->  ~/Library/Audio/Plug-Ins/VST3/
-   - Closer.component  ->  ~/Library/Audio/Plug-Ins/Components/
-   (In Finder: Go > Go to Folder... and paste the path.)
-
-2. This test version is not signed by Apple yet, so macOS blocks it.
-   Open Terminal and paste this line, then press Enter:
-
-   xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Closer.vst3 ~/Library/Audio/Plug-Ins/Components/Closer.component
-
-3. Restart your DAW and rescan plugins.
-   It appears as "Closer" by "Rave Factory".
-
-Feedback is very welcome: which DAW you use, whether it loads,
-anything that sounds wrong, and what you would add.
-
-
-CLOSER para macOS - versión de prueba (Rave Factory)
+=====================================================
+ CLOSER for macOS - test version
+ Rave Factory · 3-band stereo width control
 =====================================================
 
-1. Copia los plugins:
-   - Closer.vst3       ->  ~/Library/Audio/Plug-Ins/VST3/
-   - Closer.component  ->  ~/Library/Audio/Plug-Ins/Components/
-   (En el Finder: Ir > Ir a la carpeta... y pega la ruta.)
+ENGLISH
+-------
 
-2. Esta versión de prueba aún no está firmada por Apple y macOS la bloquea.
-   Abre el Terminal, pega esta línea y pulsa Intro:
+Closer comes in two formats. You can install both:
+  - Closer.vst3       -> Ableton Live, Reaper, FL Studio, Cubase, Bitwig...
+  - Closer.component  -> Logic Pro and GarageBand (Audio Unit)
+
+1. COPY THE PLUGINS
+
+   a) Open Finder and use the menu Go > Go to Folder...
+   b) Paste this path and press Enter:
+        ~/Library/Audio/Plug-Ins/VST3/
+      Copy Closer.vst3 into that folder.
+   c) Go > Go to Folder... again, paste this path and press Enter:
+        ~/Library/Audio/Plug-Ins/Components/
+      Copy Closer.component into that folder.
+
+   (The "~" means your user folder. The Library folder is hidden,
+   which is why "Go to Folder..." is the easiest way to get there.)
+
+2. UNBLOCK THEM
+
+   This test version is not signed by Apple yet, so macOS blocks it.
+   Open the Terminal app (Applications > Utilities > Terminal),
+   paste this line and press Enter:
 
    xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Closer.vst3 ~/Library/Audio/Plug-Ins/Components/Closer.component
 
-3. Reinicia tu DAW y vuelve a escanear los plugins.
+   Nothing is shown if it works. That is normal.
+
+3. OPEN YOUR DAW
+
+   Restart your DAW and rescan plugins if needed.
+   It appears as "Closer" by "Rave Factory".
+
+FEEDBACK
+   Please tell me which DAW and Mac you use, whether it loads,
+   anything that sounds wrong, and what you would add.
+   Thank you!
+
+
+ESPAÑOL
+-------
+
+Closer viene en dos formatos. Puedes instalar los dos:
+  - Closer.vst3       -> Ableton Live, Reaper, FL Studio, Cubase, Bitwig...
+  - Closer.component  -> Logic Pro y GarageBand (Audio Unit)
+
+1. COPIA LOS PLUGINS
+
+   a) Abre el Finder y usa el menú Ir > Ir a la carpeta...
+   b) Pega esta ruta y pulsa Intro:
+        ~/Library/Audio/Plug-Ins/VST3/
+      Copia Closer.vst3 dentro de esa carpeta.
+   c) Otra vez Ir > Ir a la carpeta..., pega esta ruta y pulsa Intro:
+        ~/Library/Audio/Plug-Ins/Components/
+      Copia Closer.component dentro de esa carpeta.
+
+   (La "~" es tu carpeta de usuario. La carpeta Library está oculta,
+   por eso lo más fácil es llegar con "Ir a la carpeta...".)
+
+2. DESBLOQUÉALOS
+
+   Esta versión de prueba aún no está firmada por Apple y macOS la bloquea.
+   Abre la aplicación Terminal (Aplicaciones > Utilidades > Terminal),
+   pega esta línea y pulsa Intro:
+
+   xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Closer.vst3 ~/Library/Audio/Plug-Ins/Components/Closer.component
+
+   Si funciona, no aparece ningún mensaje. Es normal.
+
+3. ABRE TU DAW
+
+   Reinicia tu DAW y, si hace falta, vuelve a escanear los plugins.
    Aparece como "Closer" de "Rave Factory".
 
-Cuéntame qué tal: qué DAW usas, si carga bien, si algo suena raro
-y qué le añadirías.
+OPINIONES
+   Cuéntame qué DAW y qué Mac usas, si carga bien, si algo suena raro
+   y qué le añadirías. ¡Gracias!
