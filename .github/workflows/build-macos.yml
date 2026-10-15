@@ -1,0 +1,57 @@
+# Builds Closer for macOS (VST3 + AU, universal: Apple Silicon + Intel)
+# every time code is pushed to main, or by hand from the Actions tab.
+# The result is downloadable from the run page, under "Artifacts".
+
+name: Build macOS
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  macos:
+    runs-on: macos-14
+    timeout-minutes: 60
+
+    steps:
+      - name: Get the Closer code
+        uses: actions/checkout@v4
+
+      - name: Get JUCE 9.0.3 (same version as on Windows)
+        run: git clone --depth 1 --branch 9.0.3 https://github.com/juce-framework/JUCE.git JUCE
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release --parallel 4
+
+      - name: Sign for local use (ad-hoc, no Apple account needed)
+        run: |
+          cd build/Closer_artefacts/Release
+          codesign --force --deep --sign - VST3/Closer.vst3
+          codesign --force --deep --sign - AU/Closer.component
+
+      - name: Validate the Audio Unit
+        continue-on-error: true
+        run: |
+          mkdir -p ~/Library/Audio/Plug-Ins/Components
+          cp -R build/Closer_artefacts/Release/AU/Closer.component ~/Library/Audio/Plug-Ins/Components/
+          killall -9 AudioComponentRegistrar || true
+          auval -v aufx Clsr Rvfc
+
+      - name: Package
+        run: |
+          mkdir -p package
+          cp -R build/Closer_artefacts/Release/VST3/Closer.vst3 package/
+          cp -R build/Closer_artefacts/Release/AU/Closer.component package/
+          cp packaging/INSTALL-macOS.txt package/
+          ditto -c -k --keepParent package Closer-macOS.zip
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: Closer-macOS
+          path: Closer-macOS.zip
+          retention-days: 30
