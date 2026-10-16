@@ -41,11 +41,13 @@ jobs:
           killall -9 AudioComponentRegistrar || true
           auval -v aufx Clsr Rvfc
 
+      - name: Build the installer
+        run: bash packaging/macos/build-pkg.sh
+
       - name: Package
         run: |
           mkdir -p package
-          cp -R build/Closer_artefacts/Release/VST3/Closer.vst3 package/
-          cp -R build/Closer_artefacts/Release/AU/Closer.component package/
+          cp Closer-Installer.pkg package/
           cp packaging/INSTALL-macOS.txt package/
           ditto -c -k --keepParent package Closer-macOS.zip
 
