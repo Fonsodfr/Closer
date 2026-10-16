@@ -1,0 +1,16 @@
+CLOSER by Rave Factory
+3-band stereo width control
+
+This installer copies Closer to your plugin folders:
+  - VST3        -> Ableton Live, Reaper, FL Studio, Cubase, Bitwig...
+  - Audio Unit  -> Logic Pro and GarageBand
+
+Click "Customize" on the next screens if you only want one format.
+
+---
+
+Este instalador copia Closer en tus carpetas de plugins:
+  - VST3        -> Ableton Live, Reaper, FL Studio, Cubase, Bitwig...
+  - Audio Unit  -> Logic Pro y GarageBand
+
+Pulsa "Personalizar" en las siguientes pantallas si solo quieres un formato.

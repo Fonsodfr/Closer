@@ -6,37 +6,31 @@
 ENGLISH
 -------
 
-Closer comes in two formats. You can install both:
-  - Closer.vst3       -> Ableton Live, Reaper, FL Studio, Cubase, Bitwig...
-  - Closer.component  -> Logic Pro and GarageBand (Audio Unit)
+1. Double-click Closer-Installer.pkg
 
-1. COPY THE PLUGINS
+   macOS will say it cannot verify it. Click "Done" (or "OK").
+   This test version is not signed by Apple yet. That is normal.
 
-   a) Open Finder and use the menu Go > Go to Folder...
-   b) Paste this path and press Enter:
-        ~/Library/Audio/Plug-Ins/VST3/
-      Copy Closer.vst3 into that folder.
-   c) Go > Go to Folder... again, paste this path and press Enter:
-        ~/Library/Audio/Plug-Ins/Components/
-      Copy Closer.component into that folder.
+2. Allow it
 
-   (The "~" means your user folder. The Library folder is hidden,
-   which is why "Go to Folder..." is the easiest way to get there.)
+   Open System Settings > Privacy & Security.
+   Scroll down: you will see "Closer-Installer.pkg was blocked".
+   Click "Open Anyway" and enter your Mac password.
 
-2. UNBLOCK THEM
+3. Install
 
-   This test version is not signed by Apple yet, so macOS blocks it.
-   Open the Terminal app (Applications > Utilities > Terminal),
-   paste this line and press Enter:
+   The installer opens: Continue > Install. Done.
+   (Click "Customize" if you only want the VST3 or only the Audio Unit.)
 
-   xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Closer.vst3 ~/Library/Audio/Plug-Ins/Components/Closer.component
-
-   Nothing is shown if it works. That is normal.
-
-3. OPEN YOUR DAW
+4. Open your DAW
 
    Restart your DAW and rescan plugins if needed.
    It appears as "Closer" by "Rave Factory".
+
+If you installed an earlier test version by hand, delete these
+first so you do not have two copies:
+   ~/Library/Audio/Plug-Ins/VST3/Closer.vst3
+   ~/Library/Audio/Plug-Ins/Components/Closer.component
 
 FEEDBACK
    Please tell me which DAW and Mac you use, whether it loads,
@@ -47,37 +41,31 @@ FEEDBACK
 ESPAÑOL
 -------
 
-Closer viene en dos formatos. Puedes instalar los dos:
-  - Closer.vst3       -> Ableton Live, Reaper, FL Studio, Cubase, Bitwig...
-  - Closer.component  -> Logic Pro y GarageBand (Audio Unit)
+1. Haz doble clic en Closer-Installer.pkg
 
-1. COPIA LOS PLUGINS
+   macOS dirá que no lo puede verificar. Pulsa "OK" (o "Aceptar").
+   Esta versión de prueba aún no está firmada por Apple. Es normal.
 
-   a) Abre el Finder y usa el menú Ir > Ir a la carpeta...
-   b) Pega esta ruta y pulsa Intro:
-        ~/Library/Audio/Plug-Ins/VST3/
-      Copia Closer.vst3 dentro de esa carpeta.
-   c) Otra vez Ir > Ir a la carpeta..., pega esta ruta y pulsa Intro:
-        ~/Library/Audio/Plug-Ins/Components/
-      Copia Closer.component dentro de esa carpeta.
+2. Permítelo
 
-   (La "~" es tu carpeta de usuario. La carpeta Library está oculta,
-   por eso lo más fácil es llegar con "Ir a la carpeta...".)
+   Abre Ajustes del Sistema > Privacidad y seguridad.
+   Baja hasta abajo: verás "Se ha bloqueado Closer-Installer.pkg".
+   Pulsa "Abrir igualmente" y escribe la contraseña de tu Mac.
 
-2. DESBLOQUÉALOS
+3. Instala
 
-   Esta versión de prueba aún no está firmada por Apple y macOS la bloquea.
-   Abre la aplicación Terminal (Aplicaciones > Utilidades > Terminal),
-   pega esta línea y pulsa Intro:
+   Se abre el instalador: Continuar > Instalar. Listo.
+   (Pulsa "Personalizar" si solo quieres el VST3 o solo el Audio Unit.)
 
-   xattr -dr com.apple.quarantine ~/Library/Audio/Plug-Ins/VST3/Closer.vst3 ~/Library/Audio/Plug-Ins/Components/Closer.component
-
-   Si funciona, no aparece ningún mensaje. Es normal.
-
-3. ABRE TU DAW
+4. Abre tu DAW
 
    Reinicia tu DAW y, si hace falta, vuelve a escanear los plugins.
    Aparece como "Closer" de "Rave Factory".
+
+Si instalaste a mano una versión de prueba anterior, borra antes
+estas dos para no tener el plugin repetido:
+   ~/Library/Audio/Plug-Ins/VST3/Closer.vst3
+   ~/Library/Audio/Plug-Ins/Components/Closer.component
 
 OPINIONES
    Cuéntame qué DAW y qué Mac usas, si carga bien, si algo suena raro

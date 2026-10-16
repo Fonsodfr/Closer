@@ -1,0 +1,7 @@
+Closer is installed.
+Open your DAW (rescan plugins if needed). It appears as "Closer" by "Rave Factory".
+
+---
+
+Closer está instalado.
+Abre tu DAW (vuelve a escanear los plugins si hace falta). Aparece como "Closer" de "Rave Factory".
