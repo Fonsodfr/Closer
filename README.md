@@ -1,11 +1,12 @@
 # Closer — 3-Band Stereo Imager
 
-**Rave Factory** · VST3 · Windows · built with C++ and JUCE
+**Rave Factory** · VST3 / AU · Windows & macOS · built with C++ and JUCE
 
 ![Closer interface](docs/closer.png)
 
 Closer narrows (or keeps) the stereo width independently in three frequency bands.
-It was designed for mastering, and especially for **vinyl cutting**, where wide
+It's a tool for mixing and mastering: fix a phasey mix, tighten a wide low end or
+check mono compatibility. It's especially useful for **vinyl cutting**, where wide
 low frequencies cause tracking and phase problems: you can make the bass mono
 without touching the stereo image of the mids and highs.
 
@@ -24,6 +25,16 @@ without touching the stereo image of the mids and highs.
 - Lock-free FIFO between the audio thread and the UI (no locks or allocations in `processBlock`)
 - Smoothed parameters to avoid zipper noise
 
+## Formats and compatibility
+
+| | Windows | macOS |
+| --- | --- | --- |
+| Formats | VST3 | VST3, AU |
+| Architecture | 64-bit | Universal (Apple Silicon + Intel) |
+| Tested in | Reaper | Logic Pro, Ableton Live |
+
+The Audio Unit passes Apple's `auval` validation.
+
 ## How it works
 
 1. Left/Right is converted to **Mid** `(L+R)/2` and **Side** `(L−R)/2`.
@@ -35,9 +46,25 @@ without touching the stereo image of the mids and highs.
 
 ## Building
 
+### Windows
+
 1. Open `imager.jucer` in the Projucer (JUCE 9) and save it to generate the Visual Studio project.
-2. Open `Builds/VisualStudio2022/Closer.sln` and build the `Closer_VST3` target.
+2. Open the generated solution in `Builds/` and build the `Closer_VST3` target in Release.
 3. Copy `Closer.vst3` to `C:\Program Files\Common Files\VST3\`.
+
+### macOS
+
+The macOS version is built with CMake. JUCE 9 must be in a `JUCE` folder next to `CMakeLists.txt`.
+
+```
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+bash packaging/macos/build-pkg.sh
+```
+
+The last step creates `Closer-Installer.pkg`, which installs the VST3 and AU into
+`/Library/Audio/Plug-Ins`. The same build runs automatically on GitHub Actions
+(`.github/workflows/build-macos.yml`) on every push.
 
 ## Roadmap
 
@@ -45,8 +72,10 @@ without touching the stereo image of the mids and highs.
 - [x] Phase 2 — 3-band Linkwitz-Riley crossover + null test
 - [x] Phase 3 — real-time Mid/Side spectrum analyser
 - [x] Phase 4 — Rave Factory interface, phase correlation meter and bypass
+- [x] macOS build (VST3 + AU, universal) with automated builds on GitHub Actions
+- [x] macOS installer package
+- [ ] Signed and notarized macOS installer
 - [ ] Windows installer
-- [ ] macOS build (VST3 + AU)
 
 ## Author
 
