@@ -48,11 +48,23 @@ make_package () {
 make_package "$WORK/vst3-root" "/Library/Audio/Plug-Ins/VST3"       "$ID.vst3" "Closer-VST3.pkg"
 make_package "$WORK/au-root"   "/Library/Audio/Plug-Ins/Components" "$ID.au"   "Closer-AU.pkg"
 
-# Join both into one installer with a welcome screen and a choice of formats
+# Join both into one installer with a welcome screen and a choice of formats.
+# If a "Developer ID Installer" identity is given (GitHub Actions does it when
+# the signing secrets exist), the installer is signed with it.
+SIGN_ARGS=()
+if [ -n "${INSTALLER_IDENTITY:-}" ]; then
+    echo "Signing the installer with: $INSTALLER_IDENTITY"
+    SIGN_ARGS=(--sign "$INSTALLER_IDENTITY")
+    if [ -n "${SIGNING_KEYCHAIN:-}" ]; then
+        SIGN_ARGS+=(--keychain "$SIGNING_KEYCHAIN")
+    fi
+fi
+
 productbuild --distribution "$RESOURCES/distribution.xml" \
              --resources "$RESOURCES/resources" \
              --package-path "$WORK/packages" \
              --version "$VERSION" \
+             "${SIGN_ARGS[@]+"${SIGN_ARGS[@]}"}" \
              Closer-Installer.pkg
 
 echo "Done: Closer-Installer.pkg"

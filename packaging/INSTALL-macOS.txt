@@ -1,6 +1,6 @@
 =====================================================
- CLOSER for macOS - test version
- Rave Factory · 3-band stereo width control
+ CLOSER for macOS
+ Rave Factory · 3-band Mid/Side stereo imager
 =====================================================
 
 ENGLISH
@@ -8,21 +8,15 @@ ENGLISH
 
 1. Double-click Closer-Installer.pkg
 
-   macOS will say it cannot verify it. Click "Done" (or "OK").
-   This test version is not signed by Apple yet. That is normal.
+   The installer is signed and notarized by Apple, so it opens
+   straight away.
 
-2. Allow it
+2. Install
 
-   Open System Settings > Privacy & Security.
-   Scroll down: you will see "Closer-Installer.pkg was blocked".
-   Click "Open Anyway" and enter your Mac password.
-
-3. Install
-
-   The installer opens: Continue > Install. Done.
+   Continue > Install, and enter your Mac password. Done.
    (Click "Customize" if you only want the VST3 or only the Audio Unit.)
 
-4. Open your DAW
+3. Open your DAW
 
    Restart your DAW and rescan plugins if needed.
    It appears as "Closer" by "Rave Factory".
@@ -32,10 +26,7 @@ first so you do not have two copies:
    ~/Library/Audio/Plug-Ins/VST3/Closer.vst3
    ~/Library/Audio/Plug-Ins/Components/Closer.component
 
-FEEDBACK
-   Please tell me which DAW and Mac you use, whether it loads,
-   anything that sounds wrong, and what you would add.
-   Thank you!
+Works on macOS 11 or newer, Apple Silicon and Intel.
 
 
 ESPAÑOL
@@ -43,21 +34,15 @@ ESPAÑOL
 
 1. Haz doble clic en Closer-Installer.pkg
 
-   macOS dirá que no lo puede verificar. Pulsa "OK" (o "Aceptar").
-   Esta versión de prueba aún no está firmada por Apple. Es normal.
+   El instalador está firmado y notarizado por Apple, así que se
+   abre directamente.
 
-2. Permítelo
+2. Instala
 
-   Abre Ajustes del Sistema > Privacidad y seguridad.
-   Baja hasta abajo: verás "Se ha bloqueado Closer-Installer.pkg".
-   Pulsa "Abrir igualmente" y escribe la contraseña de tu Mac.
-
-3. Instala
-
-   Se abre el instalador: Continuar > Instalar. Listo.
+   Continuar > Instalar, y escribe la contraseña de tu Mac. Listo.
    (Pulsa "Personalizar" si solo quieres el VST3 o solo el Audio Unit.)
 
-4. Abre tu DAW
+3. Abre tu DAW
 
    Reinicia tu DAW y, si hace falta, vuelve a escanear los plugins.
    Aparece como "Closer" de "Rave Factory".
@@ -67,6 +52,4 @@ estas dos para no tener el plugin repetido:
    ~/Library/Audio/Plug-Ins/VST3/Closer.vst3
    ~/Library/Audio/Plug-Ins/Components/Closer.component
 
-OPINIONES
-   Cuéntame qué DAW y qué Mac usas, si carga bien, si algo suena raro
-   y qué le añadirías. ¡Gracias!
+Funciona en macOS 11 o posterior, Apple Silicon e Intel.
