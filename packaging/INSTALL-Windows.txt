@@ -1,0 +1,51 @@
+=====================================================
+ CLOSER for Windows
+ Rave Factory · 3-band Mid/Side stereo imager
+=====================================================
+
+ENGLISH
+-------
+
+1. Double-click Closer-Setup.exe
+
+   Windows may show a blue "Windows protected your PC" window.
+   Click "More info" and then "Run anyway". This happens with
+   small independent developers; the installer is safe.
+
+2. Install
+
+   Next > Install. The plugin goes to the standard VST3 folder:
+   C:\Program Files\Common Files\VST3\Closer.vst3
+
+3. Open your DAW
+
+   Rescan plugins if needed. It appears as "Closer" by "Rave Factory".
+
+To uninstall: Settings > Apps > Closer (Rave Factory) > Uninstall.
+
+Works on Windows 10 and 11, 64-bit.
+
+
+ESPAÑOL
+-------
+
+1. Haz doble clic en Closer-Setup.exe
+
+   Puede salir una ventana azul de "Windows protegió tu PC".
+   Pulsa "Más información" y luego "Ejecutar de todas formas".
+   Pasa con los desarrolladores independientes pequeños; el
+   instalador es seguro.
+
+2. Instala
+
+   Siguiente > Instalar. El plugin se copia en la carpeta VST3 estándar:
+   C:\Program Files\Common Files\VST3\Closer.vst3
+
+3. Abre tu DAW
+
+   Si hace falta, vuelve a escanear los plugins.
+   Aparece como "Closer" de "Rave Factory".
+
+Para desinstalar: Configuración > Aplicaciones > Closer (Rave Factory) > Desinstalar.
+
+Funciona en Windows 10 y 11, 64 bits.

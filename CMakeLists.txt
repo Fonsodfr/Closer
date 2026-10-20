@@ -1,5 +1,6 @@
-# Closer: build with CMake (used for macOS builds on GitHub Actions).
-# On Windows the project is still built from imager.jucer with the Projucer.
+# Closer: build with CMake (used for the macOS and Windows builds on GitHub Actions).
+# For everyday work on Windows the project can still be built from imager.jucer
+# with the Projucer.
 #
 #   git clone --depth 1 --branch 9.0.3 https://github.com/juce-framework/JUCE.git JUCE
 #   cmake -B build -DCMAKE_BUILD_TYPE=Release
@@ -10,6 +11,10 @@ cmake_minimum_required (VERSION 3.22)
 # Universal binary (Apple Silicon + Intel), runs on macOS 11 or newer
 set (CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum macOS version")
 set (CMAKE_OSX_ARCHITECTURES "arm64;x86_64" CACHE STRING "macOS architectures")
+
+# Windows: static runtime, so the plugin runs on any PC without installing
+# the Visual C++ Redistributable (same setting as the Projucer project)
+set (CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 project (Closer VERSION 0.4.0)
 
