@@ -13,6 +13,7 @@ Backup_Fase*/
 Thumbs.db
 Desktop.ini
 
-# Carpetas de la compilación con CMake (Mac)
+# Carpetas de la compilación con CMake (Windows y Mac)
 build/
+out/
 JUCE/

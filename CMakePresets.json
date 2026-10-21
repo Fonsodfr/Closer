@@ -1,0 +1,29 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "windows-release",
+            "displayName": "Windows Release",
+            "description": "Release build for Windows with Visual Studio (VST3)",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/windows-release",
+            "architecture": { "value": "x64", "strategy": "external" },
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" },
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+        },
+        {
+            "name": "windows-debug",
+            "displayName": "Windows Debug",
+            "description": "Debug build for Windows with Visual Studio",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/windows-debug",
+            "architecture": { "value": "x64", "strategy": "external" },
+            "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" },
+            "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+        }
+    ],
+    "buildPresets": [
+        { "name": "windows-release", "configurePreset": "windows-release", "displayName": "Windows Release" },
+        { "name": "windows-debug", "configurePreset": "windows-debug", "displayName": "Windows Debug" }
+    ]
+}

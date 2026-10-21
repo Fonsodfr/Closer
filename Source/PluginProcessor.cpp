@@ -1,7 +1,8 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin processor.
+    Closer - Rave Factory
+    Procesado de audio: matriz Mid/Side, anchura por banda, bypass y correlación
 
   ==============================================================================
 */
@@ -130,16 +131,16 @@ int ImagerAudioProcessor::getCurrentProgram()
     return 0;
 }
 
-void ImagerAudioProcessor::setCurrentProgram (int index)
+void ImagerAudioProcessor::setCurrentProgram (int)
 {
 }
 
-const juce::String ImagerAudioProcessor::getProgramName (int index)
+const juce::String ImagerAudioProcessor::getProgramName (int)
 {
     return {};
 }
 
-void ImagerAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void ImagerAudioProcessor::changeProgramName (int, const juce::String&)
 {
 }
 
@@ -158,22 +159,10 @@ void ImagerAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
     bypassMix.setCurrentAndTargetValue (readParam ("bypass", 0.0f) > 0.5f ? 1.0f : 0.0f);
     correlation.store (1.0f);
 
-    // Los filtros necesitan saber la frecuencia de muestreo. Solo filtran la señal Side,
-    // que es un único canal, por eso numChannels = 1.
-    juce::dsp::ProcessSpec spec { sampleRate, (juce::uint32) samplesPerBlock, 1 };
-
-    lowSplit  .prepare (spec);
-    highSplit .prepare (spec);
-    lowAllpass.prepare (spec);
-    lowAllpass.setType (juce::dsp::LinkwitzRileyFilterType::allpass);
-
-    lowSplit  .setCutoffFrequency (readParam ("lowXover",  200.0f));
-    highSplit .setCutoffFrequency (readParam ("highXover", 4000.0f));
-    lowAllpass.setCutoffFrequency (readParam ("highXover", 4000.0f));
-
-    lowSplit.reset();
-    highSplit.reset();
-    lowAllpass.reset();
+    // Los filtros necesitan saber la frecuencia de muestreo
+    sideBands.prepare (sampleRate, samplesPerBlock);
+    sideBands.setCrossovers (readParam ("lowXover", 200.0f), readParam ("highXover", 4000.0f));
+    sideBands.reset();
 }
 
 void ImagerAudioProcessor::releaseResources()
@@ -219,9 +208,7 @@ void ImagerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     const float lowHz  = readParam ("lowXover",  200.0f);
     const float highHz = readParam ("highXover", 4000.0f);
-    lowSplit  .setCutoffFrequency (lowHz);
-    highSplit .setCutoffFrequency (highHz);
-    lowAllpass.setCutoffFrequency (highHz);   // siempre en la misma frecuencia que el segundo corte
+    sideBands.setCrossovers (lowHz, highHz);
 
     bypassMix.setTargetValue (readParam ("bypass", 0.0f) > 0.5f ? 1.0f : 0.0f);
 
@@ -249,15 +236,9 @@ void ImagerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
             const float mid  = 0.5f * (l + r);
             const float side = 0.5f * (l - r);
 
-            // 3. Partir el Side en tres bandas
-            float sideLow, sideRest, sideMid, sideHigh;
-            lowSplit .processSample (0, side,     sideLow, sideRest);  // graves | resto
-            highSplit.processSample (0, sideRest, sideMid, sideHigh);  // medios | agudos
-
-            // Los medios y agudos han pasado por el segundo corte y los graves no.
-            // Este allpass le da a los graves el mismo giro de fase, para que al
-            // sumar las tres bandas no haya huecos ni bultos en el espectro.
-            sideLow = lowAllpass.processSample (0, sideLow);
+            // 3. Partir el Side en tres bandas (graves, medios, agudos)
+            float sideLow, sideMid, sideHigh;
+            sideBands.process (side, sideLow, sideMid, sideHigh);
 
             // 4. Aplicar la anchura de cada banda y volver a sumar el Side
             const float sideOut = sideLow  * smoothedBass.getNextValue()

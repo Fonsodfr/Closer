@@ -44,27 +44,41 @@ The Audio Unit passes Apple's `auval` validation.
 3. Each Side band is scaled by its width control and summed back into `Side'`.
 4. Output: `L = Mid + Side'`, `R = Mid − Side'`. The Mid is untouched.
 
-## Building
-
-### Windows
-
-1. Open `imager.jucer` in the Projucer (JUCE 9) and save it to generate the Visual Studio project.
-2. Open the generated solution in `Builds/` and build the `Closer_VST3` target in Release.
-3. Copy `Closer.vst3` to `C:\Program Files\Common Files\VST3\`.
-
-### macOS
-
-The macOS version is built with CMake. JUCE 9 must be in a `JUCE` folder next to `CMakeLists.txt`.
+## Code layout
 
 ```
+Source/
+  PluginProcessor.h/.cpp   parameters, Mid/Side matrix, width per band, bypass, correlation
+  PluginEditor.h/.cpp      the window layout and the chassis
+  dsp/ThreeBandSplitter.h  the 3-band LR4 crossover for the Side signal
+  dsp/AnalyserFifo.h       lock-free mailbox between the audio and the spectrum display
+  ui/                      SpectrumDisplay, CorrelationMeter, RaveFactoryLookAndFeel, Theme
+packaging/                 macOS .pkg and Windows Inno Setup installers
+```
+
+## Building
+
+One CMake recipe for every platform (JUCE 9.0.3). It uses a `JUCE` folder next to
+`CMakeLists.txt` if there is one, otherwise a shared copy a few folders up.
+
+### Windows (Visual Studio 2026)
+
+File › Open › Folder, pick this folder, choose the **Windows Release** preset in the toolbar
+and Build › Build All. Then copy `build/windows-release/Closer_artefacts/Release/VST3/Closer.vst3`
+to `C:\Program Files\Common Files\VST3\`.
+
+### macOS / command line
+
+```
+git clone --depth 1 --branch 9.0.3 https://github.com/juce-framework/JUCE.git JUCE
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 bash packaging/macos/build-pkg.sh
 ```
 
 The last step creates `Closer-Installer.pkg`, which installs the VST3 and AU into
-`/Library/Audio/Plug-Ins`. The same build runs automatically on GitHub Actions
-(`.github/workflows/build-macos.yml`) on every push.
+`/Library/Audio/Plug-Ins`. GitHub Actions (`.github/workflows/build-macos.yml`) builds the signed and
+notarized macOS installer, the Windows installer and a zip with both on every push.
 
 ## Roadmap
 

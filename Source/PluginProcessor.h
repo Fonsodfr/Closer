@@ -1,7 +1,9 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin processor.
+    Closer - Rave Factory
+    Imagen estéreo en 3 bandas: el Mid no se toca; el Side se parte en graves,
+    medios y agudos (dsp/ThreeBandSplitter.h) y cada banda tiene su anchura.
 
   ==============================================================================
 */
@@ -9,23 +11,10 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "dsp/AnalyserFifo.h"
+#include "dsp/ThreeBandSplitter.h"
 
-//==============================================================================
-/**
-    F3: "buzón" entre el hilo de audio y la pantalla.
-    El audio deja aquí muestras de Mid y Side; el visualizador las recoge ~30 veces
-    por segundo. AbstractFifo funciona sin bloqueos (lock-free), así que el audio
-    nunca tiene que esperar a la interfaz. Si nadie lee (ventana cerrada), el
-    buzón se llena y las muestras nuevas simplemente se descartan.
-*/
-struct AnalyserFifo
-{
-    static constexpr int capacity = 16384;
 
-    juce::AbstractFifo fifo { capacity };
-    std::array<float, capacity> mid  {};
-    std::array<float, capacity> side {};
-};
 
 //==============================================================================
 /**
@@ -89,9 +78,7 @@ private:
     juce::SmoothedValue<float, juce::ValueSmoothingTypes::Linear> smoothedBass, smoothedMid, smoothedHigh;
 
     // F2: crossover de 3 bandas Linkwitz-Riley de 24 dB/oct (LR4), solo sobre la señal Side
-    juce::dsp::LinkwitzRileyFilter<float> lowSplit;    // corte grave/medio  (p. ej. 200 Hz)
-    juce::dsp::LinkwitzRileyFilter<float> highSplit;   // corte medio/agudo  (p. ej. 4 kHz)
-    juce::dsp::LinkwitzRileyFilter<float> lowAllpass;  // compensa la fase de la banda grave en el segundo corte
+    ThreeBandSplitter sideBands;
 
     float readParam (const char* id, float fallback) const;
 
